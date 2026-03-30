@@ -1,661 +1,466 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CS Bea Cukai Pasuruan</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Lora:ital@0;1&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --navy: #0a1628;
-    --navy-mid: #112240;
-    --navy-light: #1a3a6b;
-    --gold: #c9a84c;
-    --gold-light: #e8c96a;
-    --gold-pale: #f5e6b8;
-    --white: #ffffff;
-    --gray-100: #f0f4f8;
-    --gray-200: #dde4ee;
-    --gray-400: #8a9bb5;
-    --gray-600: #4a5e7a;
-    --green: #2ecc71;
-    --red: #e74c3c;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS Bea Cukai Pasuruan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-  body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--navy);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    position: relative;
-  }
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            background: #1e293b;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
 
-  /* Background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: 
-      radial-gradient(ellipse 80% 60% at 20% 20%, rgba(201,168,76,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 80% at 80% 80%, rgba(26,58,107,0.6) 0%, transparent 60%),
-      linear-gradient(135deg, #0a1628 0%, #0d1f3c 50%, #0a1628 100%);
-    z-index: 0;
-  }
+        .chat-header {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
 
-  /* Decorative grid */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: 
-      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    z-index: 0;
-  }
+        .chat-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
 
-  .container {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 440px;
-    padding: 16px;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+        .chat-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
 
-  /* Card */
-  .chat-card {
-    background: rgba(17, 34, 64, 0.85);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(201,168,76,0.2);
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 
-      0 32px 80px rgba(0,0,0,0.5),
-      0 0 0 1px rgba(255,255,255,0.03),
-      inset 0 1px 0 rgba(255,255,255,0.06);
-    display: flex;
-    flex-direction: column;
-    height: 88vh;
-    max-height: 700px;
-    animation: cardIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  }
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
 
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(30px) scale(0.96); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
 
-  /* Header */
-  .header {
-    padding: 20px 24px 18px;
-    background: linear-gradient(135deg, rgba(201,168,76,0.12) 0%, rgba(10,22,40,0.4) 100%);
-    border-bottom: 1px solid rgba(201,168,76,0.15);
-    position: relative;
-    overflow: hidden;
-  }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
 
-  .header::before {
-    content: '';
-    position: absolute;
-    top: -30px; right: -30px;
-    width: 120px; height: 120px;
-    background: radial-gradient(circle, rgba(201,168,76,0.15) 0%, transparent 70%);
-    border-radius: 50%;
-  }
+        .chat-messages {
+            height: 500px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #0f172a;
+        }
 
-  .header-top {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
 
-  .avatar {
-    width: 48px;
-    height: 48px;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0;
-    box-shadow: 0 4px 16px rgba(201,168,76,0.3);
-    position: relative;
-  }
+        .message.user {
+            align-items: flex-end;
+        }
 
-  .avatar::after {
-    content: '';
-    position: absolute;
-    bottom: -2px; right: -2px;
-    width: 12px; height: 12px;
-    background: var(--green);
-    border-radius: 50%;
-    border: 2px solid var(--navy-mid);
-  }
+        .message.bot {
+            align-items: flex-start;
+        }
 
-  .header-info {
-    flex: 1;
-  }
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            word-wrap: break-word;
+            animation: slideIn 0.3s ease;
+        }
 
-  .header-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--white);
-    letter-spacing: -0.2px;
-    line-height: 1.2;
-  }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-  .header-subtitle {
-    font-size: 11.5px;
-    color: var(--gold);
-    font-weight: 500;
-    margin-top: 2px;
-    opacity: 0.9;
-  }
+        .message.user .message-content {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
 
-  .status-badge {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background: rgba(46,204,113,0.12);
-    border: 1px solid rgba(46,204,113,0.25);
-    border-radius: 20px;
-    padding: 4px 10px;
-    font-size: 10.5px;
-    color: var(--green);
-    font-weight: 600;
-    letter-spacing: 0.3px;
-  }
+        .message.bot .message-content {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-bottom-left-radius: 5px;
+        }
 
-  .status-dot {
-    width: 6px; height: 6px;
-    background: var(--green);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
+        .message-time {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 5px;
+            padding: 0 5px;
+        }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-  }
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+        }
 
-  .header-meta {
-    margin-top: 12px;
-    display: flex;
-    gap: 16px;
-  }
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #f59e0b;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
 
-  .meta-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 10.5px;
-    color: var(--gray-400);
-  }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
 
-  .meta-icon { font-size: 12px; }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
 
-  /* Messages area */
-  .messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    scroll-behavior: smooth;
-  }
+        .chat-input {
+            background: #1e293b;
+            border-top: 1px solid #334155;
+            padding: 20px;
+        }
 
-  .messages::-webkit-scrollbar { width: 3px; }
-  .messages::-webkit-scrollbar-track { background: transparent; }
-  .messages::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.2); border-radius: 4px; }
+        .quick-replies {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
 
-  /* Date divider */
-  .date-divider {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 4px 0;
-  }
+        .quick-reply {
+            background: #334155;
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
 
-  .date-divider::before, .date-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(201,168,76,0.1);
-  }
+        .quick-reply:hover {
+            background: #f59e0b;
+            color: #1e293b;
+        }
 
-  .date-divider span {
-    font-size: 10px;
-    color: var(--gray-400);
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-  }
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
 
-  /* Message bubbles */
-  .msg {
-    display: flex;
-    gap: 8px;
-    animation: msgIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  }
+        .input-wrapper textarea {
+            flex: 1;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 15px;
+            padding: 12px 16px;
+            color: #e2e8f0;
+            font-size: 14px;
+            resize: none;
+            max-height: 120px;
+            font-family: inherit;
+        }
 
-  @keyframes msgIn {
-    from { opacity: 0; transform: translateY(10px) scale(0.96); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
+        .input-wrapper textarea:focus {
+            outline: none;
+            border-color: #f59e0b;
+        }
 
-  .msg.user { flex-direction: row-reverse; }
+        .send-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
 
-  .msg-avatar {
-    width: 30px; height: 30px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    flex-shrink: 0;
-    align-self: flex-end;
-  }
+        .send-btn:hover {
+            transform: scale(1.1);
+        }
 
-  .msg.bot .msg-avatar {
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-  }
+        .send-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
 
-  .msg.user .msg-avatar {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.1);
-  }
+        .chat-footer {
+            background: #0f172a;
+            padding: 10px;
+            text-align: center;
+            font-size: 11px;
+            color: #64748b;
+        }
 
-  .msg-content { max-width: 78%; }
+        .welcome-message {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #f59e0b;
+        }
 
-  .msg-bubble {
-    padding: 11px 15px;
-    border-radius: 16px;
-    font-size: 13.5px;
-    line-height: 1.55;
-    word-break: break-word;
-  }
+        .welcome-message h3 {
+            color: #f59e0b;
+            margin-bottom: 10px;
+        }
 
-  .msg.bot .msg-bubble {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.08);
-    color: #d8e4f0;
-    border-bottom-left-radius: 4px;
-  }
+        .welcome-message p {
+            line-height: 1.6;
+        }
 
-  .msg.user .msg-bubble {
-    background: linear-gradient(135deg, var(--gold) 0%, #b8932e 100%);
-    color: var(--navy);
-    font-weight: 500;
-    border-bottom-right-radius: 4px;
-    box-shadow: 0 4px 14px rgba(201,168,76,0.25);
-  }
-
-  .msg-time {
-    font-size: 10px;
-    color: var(--gray-400);
-    margin-top: 4px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .msg.user .msg-time { justify-content: flex-end; }
-
-  /* Typing indicator */
-  .typing {
-    display: flex;
-    gap: 8px;
-    align-items: flex-end;
-  }
-
-  .typing-bubble {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 16px;
-    border-bottom-left-radius: 4px;
-    padding: 13px 16px;
-    display: flex;
-    gap: 5px;
-    align-items: center;
-  }
-
-  .typing-dot {
-    width: 7px; height: 7px;
-    background: var(--gold);
-    border-radius: 50%;
-    animation: typingBounce 1.2s infinite;
-    opacity: 0.6;
-  }
-
-  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-  @keyframes typingBounce {
-    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-    30% { transform: translateY(-5px); opacity: 1; }
-  }
-
-  /* Quick replies */
-  .quick-replies {
-    padding: 0 18px 14px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .quick-btn {
-    background: rgba(201,168,76,0.08);
-    border: 1px solid rgba(201,168,76,0.2);
-    border-radius: 20px;
-    padding: 6px 13px;
-    font-size: 11.5px;
-    color: var(--gold);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-
-  .quick-btn:hover {
-    background: rgba(201,168,76,0.15);
-    border-color: rgba(201,168,76,0.4);
-    transform: translateY(-1px);
-  }
-
-  /* Input area */
-  .input-area {
-    padding: 14px 18px 18px;
-    border-top: 1px solid rgba(201,168,76,0.1);
-    background: rgba(10,22,40,0.4);
-  }
-
-  .input-wrapper {
-    display: flex;
-    gap: 10px;
-    align-items: flex-end;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 16px;
-    padding: 10px 10px 10px 16px;
-    transition: border-color 0.2s;
-  }
-
-  .input-wrapper:focus-within {
-    border-color: rgba(201,168,76,0.4);
-    box-shadow: 0 0 0 3px rgba(201,168,76,0.06);
-  }
-
-  textarea {
-    flex: 1;
-    background: none;
-    border: none;
-    outline: none;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13.5px;
-    color: var(--white);
-    resize: none;
-    max-height: 100px;
-    line-height: 1.5;
-    padding: 2px 0;
-  }
-
-  textarea::placeholder { color: var(--gray-400); }
-
-  .send-btn {
-    width: 36px; height: 36px;
-    background: linear-gradient(135deg, var(--gold) 0%, #b8932e 100%);
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.2s;
-    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
-  }
-
-  .send-btn:hover { transform: scale(1.05); box-shadow: 0 4px 14px rgba(201,168,76,0.4); }
-  .send-btn:active { transform: scale(0.96); }
-
-  .send-btn svg { width: 16px; height: 16px; fill: var(--navy); }
-
-  .input-footer {
-    margin-top: 10px;
-    text-align: center;
-    font-size: 10px;
-    color: var(--gray-400);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-  }
-
-  .input-footer span { opacity: 0.6; }
-
-  /* Decorative corner accent */
-  .corner-accent {
-    position: absolute;
-    top: 0; right: 0;
-    width: 60px; height: 60px;
-    border-top: 2px solid rgba(201,168,76,0.3);
-    border-right: 2px solid rgba(201,168,76,0.3);
-    border-radius: 0 24px 0 0;
-    pointer-events: none;
-  }
-
-  /* Responsive */
-  @media (max-width: 480px) {
-    .container { padding: 0; }
-    .chat-card { border-radius: 0; height: 100vh; max-height: 100vh; }
-  }
-</style>
+        @media (max-width: 640px) {
+            body {
+                padding: 0;
+            }
+            
+            .chat-container {
+                border-radius: 0;
+                height: 100vh;
+                max-height: 100vh;
+            }
+            
+            .chat-messages {
+                height: calc(100vh - 200px);
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <div class="chat-card">
-    <div class="corner-accent"></div>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>⚓ CS Bea Cukai Pasuruan</h1>
+            <p>KPPBC TMP A Pasuruan</p>
+            <div class="status">
+                <span class="status-dot"></span>
+                <span>Online</span>
+            </div>
+            <p style="margin-top: 10px; font-size: 12px;">
+                ⚡ Respon cepat 🕐 Senin–Jumat, 08.00–16.00
+            </p>
+        </div>
 
-    <!-- Header -->
-    <div class="header">
-      <div class="header-top">
-        <div class="avatar">⚓</div>
-        <div class="header-info">
-          <div class="header-title">CS Bea Cukai Pasuruan</div>
-          <div class="header-subtitle">KPPBC TMP A Pasuruan</div>
+        <div class="chat-messages" id="messages">
+            <div class="welcome-message">
+                <h3>Halo! 👋</h3>
+                <p>Selamat datang di layanan CS Bea Cukai Pasuruan.</p>
+                <p style="margin-top: 10px;">Saya siap membantu pertanyaan Anda seputar kepabeanan dan cukai. Silakan ketik pertanyaan Anda atau pilih topik di bawah.</p>
+            </div>
         </div>
-        <div class="status-badge">
-          <div class="status-dot"></div>
-          Online
+
+        <div class="chat-input">
+            <div class="quick-replies">
+                <button class="quick-reply">📱 Info IMEI</button>
+                <button class="quick-reply">📋 NPPBKC</button>
+                <button class="quick-reply">🧳 Barang Penumpang</button>
+                <button class="quick-reply">🏭 Kawasan Berikat</button>
+            </div>
+            
+            <div class="input-wrapper">
+                <textarea 
+                    id="msgInput" 
+                    placeholder="Ketik pertanyaan Anda..." 
+                    rows="1"
+                ></textarea>
+                <button class="send-btn" onclick="sendMessage()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+            </div>
         </div>
-      </div>
-      <div class="header-meta">
-        <div class="meta-item">
-          <span class="meta-icon">⚡</span>
-          <span>Respon cepat</span>
+
+        <div class="chat-footer">
+            🔒 Percakapan Anda aman & terlindungi
         </div>
-        <div class="meta-item">
-          <span class="meta-icon">🕐</span>
-          <span>Senin–Jumat, 08.00–16.00</span>
-        </div>
-      </div>
     </div>
 
-    <!-- Messages -->
-    <div class="messages" id="messages">
-      <div class="date-divider">
-        <span id="todayLabel">Hari ini</span>
-      </div>
-
-      <!-- Welcome message -->
-      <div class="msg bot">
-        <div class="msg-avatar">⚓</div>
-        <div class="msg-content">
-          <div class="msg-bubble">
-            Halo! 👋 Selamat datang di layanan CS Bea Cukai Pasuruan.<br><br>
-            Saya siap membantu pertanyaan Anda seputar kepabeanan dan cukai. Silakan ketik pertanyaan Anda atau pilih topik di bawah.
-          </div>
-          <div class="msg-time" id="welcomeTime"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Quick replies -->
-    <div class="quick-replies" id="quickReplies">
-      <button class="quick-btn" onclick="sendQuick('Info IMEI')">📱 Info IMEI</button>
-      <button class="quick-btn" onclick="sendQuick('Cara daftar NPPBKC')">📋 NPPBKC</button>
-      <button class="quick-btn" onclick="sendQuick('Barang bawaan penumpang')">🧳 Barang Penumpang</button>
-      <button class="quick-btn" onclick="sendQuick('Kawasan Berikat')">🏭 Kawasan Berikat</button>
-    </div>
-
-    <!-- Input -->
-    <div class="input-area">
-      <div class="input-wrapper">
-        <textarea
-          id="msgInput"
-          placeholder="Ketik pertanyaan Anda..."
-          rows="1"
-          onkeydown="handleKey(event)"
-          oninput="autoResize(this)"
-        ></textarea>
-        <button class="send-btn" onclick="sendMessage()">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-          </svg>
-        </button>
-      </div>
-      <div class="input-footer">
-        <span>🔒</span>
-        <span>Percakapan Anda aman & terlindungi</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  const BACKEND_URL = 'https://cs-bot-backend-production.up.railway.app';
-
-  const messagesEl = document.getElementById('messages');
-  const inputEl = document.getElementById('msgInput');
-
-  // Set today label & welcome time
-  const now = new Date();
-  document.getElementById('todayLabel').textContent = now.toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-  document.getElementById('welcomeTime').textContent = formatTime(now);
-
-  function formatTime(date) {
-    return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-  }
-
-  function autoResize(el) {
-    el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, 100) + 'px';
-  }
-
-  function handleKey(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  }
-
-  function sendQuick(text) {
-    inputEl.value = text;
-    document.getElementById('quickReplies').style.display = 'none';
-    sendMessage();
-  }
-
-  function addMessage(text, type, time) {
-    const t = time || formatTime(new Date());
-    const isBot = type === 'bot';
-
-    const msg = document.createElement('div');
-    msg.className = `msg ${type}`;
-    msg.innerHTML = `
-      <div class="msg-avatar">${isBot ? '⚓' : '👤'}</div>
-      <div class="msg-content">
-        <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>
-        <div class="msg-time">${isBot ? '⚓ CS Bot · ' : ''}${t}</div>
-      </div>
-    `;
-    messagesEl.appendChild(msg);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-    return msg;
-  }
-
-  function addTyping() {
-    const el = document.createElement('div');
-    el.className = 'typing';
-    el.id = 'typing';
-    el.innerHTML = `
-      <div class="msg-avatar" style="background:linear-gradient(135deg,#c9a84c,#e8c96a);width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;">⚓</div>
-      <div class="typing-bubble">
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-      </div>
-    `;
-    messagesEl.appendChild(el);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-  }
-
-  function removeTyping() {
-    const el = document.getElementById('typing');
-    if (el) el.remove();
-  }
-
-  async function sendMessage() {
-    const text = inputEl.value.trim();
-    if (!text) return;
-
-    inputEl.value = '';
-    inputEl.style.height = 'auto';
-    document.getElementById('quickReplies').style.display = 'none';
-
-    addMessage(text, 'user');
-    addTyping();
-
-    try {
-      const res = await fetch(`${BACKEND_URL}/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, sessionId: getSessionId() })
-      });
-
-      const data = await res.json();
-      removeTyping();
-
-      if (data.reply) {
-        addMessage(data.reply, 'bot');
-      } else {
-        addMessage('Maaf, terjadi kendala. Silakan coba beberapa saat lagi.', 'bot');
-      }
-    } catch (err) {
-      removeTyping();
-      addMessage('Maaf, tidak dapat terhubung ke server. Silakan coba lagi.', 'bot');
-    }
-  }
-
-  function getSessionId() {
-    let id = localStorage.getItem('cs_session');
-    if (!id) {
-      id = 'sess_' + Math.random().toString(36).substr(2, 9);
-      localStorage.setItem('cs_session', id);
-    }
-    return id;
-  }
-</script>
+    <script>
+        // Backend URL
+        const BACKEND_URL = 'https://cs-bot-backend-production.up.railway.app';
+        
+        // Generate session ID unik
+        const sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
+        
+        // Element references
+        const msgInput = document.getElementById('msgInput');
+        const messagesContainer = document.getElementById('messages');
+        
+        // Auto-resize textarea
+        msgInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+        
+        // Fungsi kirim pesan
+        async function sendMessage() {
+            const message = msgInput.value.trim();
+            if (!message) return;
+            
+            // Tampilkan pesan user
+            addMessage(message, 'user');
+            msgInput.value = '';
+            msgInput.style.height = 'auto';
+            
+            // Tampilkan loading
+            const loadingId = addLoadingMessage();
+            
+            try {
+                // Kirim ke backend
+                const response = await fetch(`${BACKEND_URL}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message, sessionId })
+                });
+                
+                const data = await response.json();
+                
+                // Hapus loading
+                removeMessage(loadingId);
+                
+                // Tampilkan response
+                addMessage(data.reply, 'bot');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                removeMessage(loadingId);
+                addMessage('Maaf, tidak dapat terhubung ke server. Silakan coba lagi.', 'bot');
+            }
+        }
+        
+        // Fungsi tambah pesan ke chat
+        function addMessage(text, sender) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${sender}`;
+            
+            const time = new Date().toLocaleTimeString('id-ID', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            // Convert markdown-like formatting to HTML
+            const formattedText = formatMessage(text);
+            
+            msgDiv.innerHTML = `
+                <div class="message-content">${formattedText}</div>
+                <div class="message-time">${time}</div>
+            `;
+            
+            messagesContainer.appendChild(msgDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        // Fungsi format pesan (bold, italic, dll)
+        function formatMessage(text) {
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/__(.*?)__/g, '<u>$1</u>')
+                .replace(/\n/g, '<br>');
+        }
+        
+        // Fungsi tambah loading message
+        function addLoadingMessage() {
+            const id = 'loading_' + Date.now();
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message bot';
+            msgDiv.id = id;
+            
+            msgDiv.innerHTML = `
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(msgDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            return id;
+        }
+        
+        // Fungsi hapus pesan
+        function removeMessage(id) {
+            const msg = document.getElementById(id);
+            if (msg) msg.remove();
+        }
+        
+        // Event listener untuk Enter key
+        msgInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // Quick reply buttons
+        document.querySelectorAll('.quick-reply').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const text = this.textContent.replace(/^[^\s]+\s*/, ''); // Remove emoji
+                msgInput.value = text;
+                sendMessage();
+            });
+        });
+        
+        // Welcome message dengan waktu
+        const now = new Date();
+        const hours = now.getHours();
+        let greeting = 'Selamat pagi';
+        if (hours >= 11) greeting = 'Selamat siang';
+        if (hours >= 15) greeting = 'Selamat sore';
+        if (hours >= 18) greeting = 'Selamat malam';
+        
+        console.log(`${greeting}! CS Bot Backend: ${BACKEND_URL}`);
+    </script>
 </body>
 </html>
