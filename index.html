@@ -425,7 +425,7 @@
 <div class="toast" id="toast">Gagal menghubungi server. Coba lagi.</div>
 
 <script>
-  const BACKEND_URL = 'https://cs-bot-backend-production.up.railway.app';
+  const BACKEND_URL = 'https://cs-bot-backend-kappa.vercel.app/api';
   const messagesEl  = document.getElementById('messages');
   const inputEl     = document.getElementById('userInput');
   const sendBtnEl   = document.getElementById('sendBtn');
@@ -531,7 +531,18 @@
         body: JSON.stringify({ message: text, session_id: sessionId })
       });
 
-      if (!res.ok) throw new Error('Server error ' + res.status);
+      if (!res.ok) {
+        let errorMessage = 'Server error ' + res.status;
+
+        try {
+          const errorData = await res.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch (parseError) {
+          // Keep the default status-based message when the error body is not JSON.
+        }
+
+        throw new Error(errorMessage);
+      }
 
       const data = await res.json();
       removeTyping();
@@ -539,7 +550,7 @@
 
     } catch (err) {
       removeTyping();
-      showToast('Gagal menghubungi server. Coba lagi.');
+      showToast(err.message || 'Gagal menghubungi server. Coba lagi.');
       console.error(err);
     }
 
